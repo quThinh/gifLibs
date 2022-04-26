@@ -1,16 +1,29 @@
-import { Outlet, Link } from "react-router-dom";
+
 import { useParams } from "react-router-dom";
-import { useEffect, useState, createContext } from 'react';
+import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import './Search.css'
+import Alert from 'react-bootstrap/Alert';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Outlet, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-import image1 from './1.png'
-import image2 from './2.png'
+
+
 const Search = () => {
-    const UserContext = createContext()
-    const [hearList, setHearlist] = useState([""]);
+    const [total, setTotal] = useState(localStorage.length);
+    const [show, setShow] = useState(false);
     const [gif, setGif] = useState([]);
     const [x, setX] = useState(8);
+    const [value, setValue] = useState("");
+    const navigate = useNavigate();
+    const handleSubmit = () => {
+        navigate(`/Search/${value}`);
+        setValue("");
+    };
+    const handleInput = (e) => {
+        setValue(e.target.value);
+    };
     let query = useParams();
     useEffect(() => {
         const headuUrl = "https://api.giphy.com/v1/gifs/search?api_key=KD81Bgx4fJKD4d6SMKtivrjpEu1ZQPCM&limit="
@@ -25,55 +38,70 @@ const Search = () => {
             .catch(err => {
                 console.error(err);
             })
-
     }, [x])
-
-
-    var Heart = document.querySelector('.gif-block')
-    if (Heart != null) {
-        Heart.addEventListener('click', heart)
-        function heart(event) {
-            var item = event.target;
-            if(item.className === "gif-small" || item.className === "img-heart"){
-                if(hearList.indexOf(item.parentElement.children[0].src) == -1){
-                    setHearlist([...hearList,...item.parentElement.children[0].src]);
-                    console.log(hearList)
-                    // var x = document.querySelector(".gif-heart");
-                    // var y = document.querySelector(".img-heart")
-                    // x.removeChild(y)
-                    // var z = document.createElement("img");
-                    // z.src = {image1};
-                    // console.log(image2);
-                    // x.appendChild(z);
-                }
-                else{
-                    hearList.pop(item.parentElement.children[0].src)
-                }
-            }
-            console.log(hearList)
+    const heart = (event) => {
+        if (localStorage.getItem(event.target.id) === null) {
+            localStorage.setItem(event.target.id, event.target.src);
         }
+        // else {
+        //     localStorage.removeItem(event.target.id)
+        // }
     }
 
-    if (gif.length === 0) return (
-        <>
-            <Outlet />
-        </>
-    );
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setShow(false);
+        }, 1000);
+        return () => clearTimeout(timer);
+    }, [show]);
+
+    if (gif.length === 0) return null;
     else {
         return (
             <>
+                <nav className="block-up">
+                    <Link to="/">
+                        <div className="square">
+                            <FontAwesomeIcon className="icon" icon="fa-solid fa-magnifying-glass" />
+                            <Link to="/" className="texts">Search</Link>
+                        </div>
+                    </Link>
+
+                    <Link to="/Favourite">
+                        <div className="square">
+                            <FontAwesomeIcon style={{ color: "red" }} className="icon" icon="fa-solid fa-heart" />
+                            <Link to="/Favourite" className="texts">Favourite({localStorage.length})</Link>
+                        </div>
+                    </Link>
+
+                </nav>
+                <form onSubmit={() => handleSubmit()}>
+                    <input
+                        placeholder="Search for Gif..."
+                        className="header-search"
+                        value={value}
+                        onChange={(e) => handleInput(e)}
+                    />
+                </form>
+                <Alert show={show} variant="success" id="alert">
+                    <Alert.Heading id="alert-heading">Add Gif successfully</Alert.Heading>
+                </Alert>
                 <nav className="block" >
-                    <div className="gif-block">{gif.map((item) => (
-                        <div className="gif-heart" key={item.images.downsized.url}>
-                            <img className="gif-small" src={item.images.downsized.url}></img>
-                            <img className="img-heart" src={image2} id=""></img>
+                    <div className="gif-block" >{gif.map((item) => (
+                        <div className="gif-heart" onClick={(e) => {
+                            heart(e);
+                            setShow(true);
+                            setTotal(() => localStorage.length)
+                        }}>
+                            <img className="gif-small" id={item.id} src={item.images.downsized.url}></img>
+                            <FontAwesomeIcon className="img-heart" size="2x" icon="fa-solid fa-heart" />
                         </div>
 
                     ))}
                     </div>
                 </nav>
                 <Outlet />
-                <button className="btn" onClick={() => setX(() => x + 8)}>Load more</button>
+                <button className="btn2" onClick={() => setX(() => x + 8)}>Load more</button>
             </>
         )
     }

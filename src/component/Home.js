@@ -1,6 +1,6 @@
 import { Outlet, Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './Search.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -17,6 +17,7 @@ const Home = () => {
     const handleInput = (e) => {
         setValue(e.target.value);
     };
+
     return (
         <>
             <nav className="block-up">
@@ -30,7 +31,7 @@ const Home = () => {
                 <Link to="/Favourite">
                     <div className="square">
                         <FontAwesomeIcon style={{color:"red"}} className="icon" icon="fa-solid fa-heart" />
-                        <Link to="/Favourite" className="texts">Favourite</Link>
+                        <Link to="/Favourite" className="texts">Favourite({localStorage.length})</Link>
                     </div>
                 </Link>
 

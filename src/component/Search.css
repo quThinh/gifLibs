@@ -4,7 +4,7 @@
     display: inline;
 }
 .gif-block{
-    margin: 45px 40px;
+    margin: 45px 231px;
     display: flex-inline;
 }
 
@@ -12,7 +12,7 @@
     margin-right: 28px;
     display: inline-block;
     width: 338px;
-    height: 295px;
+    height: 250px;
 }
 
 
@@ -23,6 +23,16 @@
 .gif-small{
     width: 338px;
     height: 250px;
+    opacity: 1;
+}
+
+
+.gif-small:hover{
+    opacity: 0.9;
+}
+
+.gif-heart:hover .img-heart{
+    opacity: 1;
 }
 
 .txt{
@@ -35,37 +45,40 @@
     height: 100%;
 }
 
-.btn{
-    margin: 10px 686px;
-    border: 3px solid #c00;
-    background-color: #c00;
+.btn2{
+    margin: 10px 47%  ;
+    border: 3px solid #c00 ;
+    background-color: #c00 ;
     height: 35px;
     width: 110px;
-    text-align: center;
-    color: #fdfdff;
-    font-weight: bold;
-    font-size: 15px;
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
-    border-radius: 10px;
+    text-align: center ;
+    color: #fdfdff ;
+    font-weight: bold ;
+    font-size: 15px ;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif  ;
+    border-radius: 10px ;
 }
 
-.btn:hover{
+.btn2:hover{
     background-color: rgb(148, 15, 15);
     color: rgb(243, 231, 231);
+}
+
+#alert-heading{
+    font-size: 20px;
 }
 
 .square{
     border: 1px solid rgb(255, 255, 255);
     display: inline-block;
     border-bottom: gray;
-    margin-left: 10px;
+    margin-left: 34px;
     width: 130px;
-    height: 98%;
+    height: 99%;
 }
 
 .square:hover{
     border-bottom: 3px solid red;
-    color: blue;
 }
 
 .icon-hearts{
@@ -88,6 +101,22 @@
 .img-heart{
     width: 70px;
     margin-left: 130px;
+    transform: translate(265px,-45px);
+    margin-left: 10px;
+    color: red;
+    opacity: 0;
+    /* transform: translateX(10px); */
+}
+
+#alert{
+        top:10px;
+        right: 15px;
+        position: fixed;
+        height: 55px;
+}
+
+.img-heart:hover{
+    opacity: 1;
 }
 
 .img-heart:hover{
@@ -97,6 +126,7 @@
 .icons:visited{
     color: red;
 }
+
 .texts{
     text-decoration: none;
     display: block;
@@ -114,7 +144,10 @@
 
 input{
     width: 65%;
-    height: 25px;
+    height: 41px;
+    padding-left: 10px;
+    font-weight: bold;
+    font-size: 20px !important;
     border: 1px solid rgb(255, 255, 255);
     border-bottom: 3px solid gray;
 }
