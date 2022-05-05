@@ -1,20 +1,34 @@
 import { Outlet, Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import './Search.css'
+import {useSelector, useDispatch} from 'react-redux'
 import Alert from 'react-bootstrap/Alert';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { addFavourite, removeFavourite } from "../redux/actions";
 
 const Favourite = () => {
+  const dispatch = useDispatch();
   const [show, setShow] = useState(false);
-  const SaveURL = [];
-  const SaveID = [];
-  for (let i = 0; i < localStorage.length; i++) {
-    SaveURL.push(localStorage.getItem(localStorage.key(i)));
-    SaveID.push(localStorage.key(i));
-  }
+  const gifsFavor = useSelector((state) => state.Favor);
+
+    if(gifsFavor.length === 0 && localStorage.length !== 0){
+      for(let i = 0; i < localStorage.length; i++){
+        let localFavorKey = localStorage.key(i);
+        let localFavorvalue = localStorage.getItem(localStorage.key(i));
+        let localFavor = {id:localFavorKey, url:localFavorvalue }
+        dispatch(addFavourite(localFavor));
+      }
+    }
 
   const unHeart = (event) => {
+    for(let i = 0; i < gifsFavor.length; i++){
+      if(gifsFavor[i].id === event.target.id) gifsFavor.splice(i,1);
+    }
+    if (event.target.id === "") {
+      localStorage.removeItem(event.target.farthestViewportElement.parentElement.children[0].id, event.target.farthestViewportElement.parentElement.children[0].src);
+      return;
+    }
     if (localStorage.getItem(event.target.id) !== null) {
       localStorage.removeItem(event.target.id);
     }
@@ -23,7 +37,7 @@ const Favourite = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShow(false);
-    }, 1000);
+    }, 200);
     return () => clearTimeout(timer);
   }, [show]);
 
@@ -49,12 +63,12 @@ const Favourite = () => {
       </Alert>
 
       <nav className="block" >
-        <div className="gif-block" >{SaveID.map((item) => (
+        <div className="gif-block" >{gifsFavor.map((item) => (
           <div className="gif-heart" onClick={(e) => {
             unHeart(e);
             setShow(true)
           }} >
-            <img className="gif-small" id={item} src={localStorage.getItem(item)}></img>
+            <img className="gif-small" id={item.id} src={item.url}></img>
             <FontAwesomeIcon className="img-heart" size="2x" icon="fa-solid fa-heart" />
           </div>
 

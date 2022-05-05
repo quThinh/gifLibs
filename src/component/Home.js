@@ -17,7 +17,6 @@ const Home = () => {
     const handleInput = (e) => {
         setValue(e.target.value);
     };
-
     return (
         <>
             <nav className="block-up">
